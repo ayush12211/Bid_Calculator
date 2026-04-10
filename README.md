@@ -1,103 +1,107 @@
 # Online Auction System
-**Stack:** Node.js + Express + PostgreSQL (backend) · React + Vite (frontend)
 
----
+This is a small full-stack auction project I built using React, Node.js, Express, and PostgreSQL.
 
-## Folder Structure
+The idea is simple: a user can create an auction, open the auction room, place bids in real time, and manually end the auction when needed. The app keeps track of the current highest bid, top bidder, bid history, and auction status.
 
-```
-auction-system/
+## Tech stack
+
+- Frontend: React + Vite
+- Backend: Node.js + Express
+- Database: PostgreSQL
+- HTTP client: Axios
+
+## What the project does
+
+- Create a new auction with item name, description, starting price, and duration
+- View auction details in a dedicated auction room
+- Place bids with validation
+- Show current highest bid, top bidder, and total bids
+- Keep a bid history list
+- Auto-end the auction when time is over
+- Allow manual auction ending from the UI
+
+## Project structure
+
+```text
+auction-system-pg/
 ├── backend/
 │   ├── routes/
-│   │   └── auction.js      ← All API routes
-│   ├── db.js               ← PostgreSQL pool
-│   ├── schema.sql          ← Run once to create tables
-│   ├── server.js           ← Express entry point
-│   ├── .env.example        ← Copy to .env
+│   │   └── auction.js
+│   ├── db.js
+│   ├── schema.sql
+│   ├── server.js
 │   └── package.json
-└── frontend/
-    ├── src/
-    │   ├── components/
-    │   │   ├── CreateAuction.jsx
-    │   │   ├── CreateAuction.module.css
-    │   │   ├── AuctionRoom.jsx
-    │   │   └── AuctionRoom.module.css
-    │   ├── App.jsx
-    │   ├── api.js
-    │   ├── main.jsx
-    │   └── index.css
-    ├── index.html
-    ├── vite.config.js
-    └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── api.js
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │   └── index.css
+│   ├── index.html
+│   ├── vite.config.js
+│   └── package.json
+└── README.md
 ```
 
----
+## API routes
 
-## API Endpoints
+These are the main backend routes used in the project:
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auction` | Create a new auction |
-| GET | `/api/auction` | List all auctions |
-| GET | `/api/auction/:id` | Get auction + bids |
-| POST | `/api/auction/:id/bid` | Place a bid |
-| PATCH | `/api/auction/:id/end` | Manually end auction |
+- `POST /api/auction` to create a new auction
+- `GET /api/auction` to fetch all auctions
+- `GET /api/auction/:id` to fetch a single auction with its bids
+- `POST /api/auction/:id/bid` to place a bid
+- `PATCH /api/auction/:id/end` to end an auction manually
 
----
+## Running locally
 
-# ─── LOCAL SETUP ───────────────────────────────────────
+### 1. Create the database
 
-## Prerequisites
-- Node.js 18+ installed
-- PostgreSQL installed locally OR use a free cloud DB (see deploy section)
-
----
-
-## Step 1 — Set up the database (local)
-
-If you have PostgreSQL installed locally:
+Make sure PostgreSQL is installed and running.
 
 ```bash
-# Open psql
 psql -U postgres
+```
 
-# Create the database
+Inside `psql`, create the database:
+
+```sql
 CREATE DATABASE auctiondb;
-\q
+```
 
-# Run the schema
+Then run the schema:
+
+```bash
 psql -U postgres -d auctiondb -f backend/schema.sql
 ```
 
----
-
-## Step 2 — Backend (local)
+### 2. Start the backend
 
 ```bash
 cd backend
-cp .env.example .env
+npm install
 ```
 
-Edit `.env`:
-```
+Create a `.env` file inside `backend` and add:
+
+```env
 DATABASE_URL=postgresql://postgres:yourpassword@localhost:5432/auctiondb
 PORT=5000
 ```
 
+Then run:
+
 ```bash
-npm install
 npm run dev
 ```
 
-Backend runs at → http://localhost:5000
+The backend should start on `http://localhost:5000`.
 
-Test it: open http://localhost:5000 — you should see `{ "message": "Auction API is running ✓" }`
+### 3. Start the frontend
 
----
-
-## Step 3 — Frontend (local)
-
-Open a new terminal:
+Open another terminal:
 
 ```bash
 cd frontend
@@ -105,114 +109,54 @@ npm install
 npm run dev
 ```
 
-Frontend runs at → http://localhost:5173
+The frontend should start on `http://localhost:5173`.
 
-The Vite proxy forwards all `/api` calls to `localhost:5000` automatically — no CORS issues.
+## Deployment
 
----
+I deployed the frontend and backend separately.
 
-# ─── DEPLOYMENT ────────────────────────────────────────
-# Deploy backend FIRST, then frontend.
-# ──────────────────────────────────────────────────────
+- Frontend: Vercel
+- Backend: Render
+- Database: Neon PostgreSQL
 
-## DEPLOY STEP 1 — Push code to GitHub
+### Backend deployment
+
+For the backend, set the root directory to `backend` and add the required environment variables on Render.
+
+Important environment variables:
+
+- `DATABASE_URL`
+- `NODE_ENV=production`
+
+Start command:
 
 ```bash
-# In the root auction-system folder
-git init
-git add .
-git commit -m "initial commit"
-# Create a repo on github.com, then:
-git remote add origin https://github.com/YOUR_USERNAME/auction-system.git
-git push -u origin main
+node server.js
 ```
 
----
+### Frontend deployment
 
-## DEPLOY STEP 2 — Create PostgreSQL DB on Neon (free, no credit card)
+For the frontend, set the root directory to `frontend` on Vercel.
 
-1. Go to → https://neon.tech and sign up (free)
-2. Click **New Project** → give it a name → Create
-3. On the dashboard, click **SQL Editor**
-4. Paste the contents of `backend/schema.sql` and click **Run**
-   (This creates the `auctions` and `bids` tables)
-5. Go to **Dashboard** → **Connection Details**
-6. Copy the **Connection string** — it looks like:
-   ```
-   postgresql://username:password@ep-xxx.us-east-2.aws.neon.tech/neondb?sslmode=require
-   ```
-   Save this — you'll need it in the next step.
+Add this environment variable:
 
----
-
-## DEPLOY STEP 3 — Deploy Backend on Render (free)
-
-1. Go to → https://render.com and sign up
-2. Click **New +** → **Web Service**
-3. Connect your GitHub repo
-4. Fill in:
-   - **Name:** `auction-backend`
-   - **Root Directory:** `backend`
-   - **Runtime:** Node
-   - **Build Command:** `npm install`
-   - **Start Command:** `node server.js`
-5. Scroll to **Environment Variables** → Add:
-   - Key: `DATABASE_URL`
-   - Value: *(paste your Neon connection string)*
-   - Key: `NODE_ENV`
-   - Value: `production`
-6. Click **Create Web Service**
-7. Wait ~2 minutes for the build to finish
-8. Copy your backend URL — it looks like:
-   ```
-   https://auction-backend-xxxx.onrender.com
-   ```
-9. Test it: open `https://auction-backend-xxxx.onrender.com` in browser
-   → You should see `{ "message": "Auction API is running ✓" }`
-
----
-
-## DEPLOY STEP 4 — Deploy Frontend on Vercel (free)
-
-1. Go to → https://vercel.com and sign up
-2. Click **Add New** → **Project**
-3. Import your GitHub repo
-4. Fill in:
-   - **Root Directory:** `frontend`
-   - **Framework Preset:** Vite (auto-detected)
-5. Expand **Environment Variables** → Add:
-   - Key: `VITE_API_URL`
-   - Value: `https://auction-backend-xxxx.onrender.com`
-     *(your actual Render URL from Step 3 — no trailing slash)*
-6. Click **Deploy**
-7. Wait ~1 minute
-8. Vercel gives you a URL like:
-   ```
-   https://auction-system-yogesh.vercel.app
-   ```
-
-That's the link you send to the recruiter. ✓
-
----
-
-## What to send the recruiter
-
-```
-Live demo: https://auction-system-yogesh.vercel.app
-GitHub:    https://github.com/YOUR_USERNAME/auction-system
-
-Stack: Node.js · Express · PostgreSQL (Neon) · React · Vite
-Deployed: Render (backend) + Vercel (frontend)
+```env
+VITE_API_URL=https://your-backend-url.onrender.com
 ```
 
----
+## A few notes
 
-## Troubleshooting
+- The frontend uses `VITE_API_URL` in production and falls back to `/api` locally.
+- Bids must always be greater than the current highest bid.
+- The backend also checks whether the auction has already ended before accepting a bid.
 
-| Problem | Fix |
-|---------|-----|
-| Backend crashes on Render | Check Render logs — usually wrong DATABASE_URL |
-| Frontend shows blank page | Check VITE_API_URL in Vercel env vars — must be full URL with https |
-| CORS error in browser | Make sure VITE_API_URL has no trailing slash |
-| Neon SSL error locally | Set `ssl: false` in db.js (already handled by NODE_ENV check) |
-| Render sleeps after 15 min | Free tier spins down — first request takes ~30s to wake up |
+## If something does not work
+
+- Check whether PostgreSQL is running locally
+- Make sure `DATABASE_URL` is correct
+- Make sure the schema has been imported
+- If the frontend cannot reach the backend in production, recheck `VITE_API_URL`
+
+## Why I made this
+
+I built this project as a practical full-stack assignment/project to show CRUD flow, API handling, PostgreSQL integration, and a clean React UI in one small app.
