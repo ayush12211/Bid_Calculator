@@ -19,6 +19,8 @@ export default function AuctionRoom({ auctionId, onReset }) {
   const [amount, setAmount] = useState("");
   const [toast, setToast] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [ending, setEnding] = useState(false);
+  const [isEndModalOpen, setIsEndModalOpen] = useState(false);
   const [timer, setTimer] = useState(null);
 
   const fetchAuction = useCallback(async () => {
@@ -72,13 +74,16 @@ export default function AuctionRoom({ auctionId, onReset }) {
   };
 
   const handleEnd = async () => {
-    if (!window.confirm("End this auction now?")) return;
+    setEnding(true);
     try {
       await endAuction(auctionId);
       showToast("Auction ended.", "success");
+      setIsEndModalOpen(false);
       await fetchAuction();
     } catch (err) {
       showToast(err.response?.data?.error || "Failed to end.", "error");
+    } finally {
+      setEnding(false);
     }
   };
 
@@ -198,7 +203,11 @@ export default function AuctionRoom({ auctionId, onReset }) {
               {loading ? "..." : "Bid"}
             </button>
           </div>
-          <button className={styles.endBtn} onClick={handleEnd}>
+          <button
+            className={styles.endBtn}
+            onClick={() => setIsEndModalOpen(true)}
+            disabled={ending}
+          >
             End Auction Now
           </button>
         </div>
@@ -226,6 +235,37 @@ export default function AuctionRoom({ auctionId, onReset }) {
           </div>
         )}
       </div>
+
+      {isEndModalOpen && (
+        <div className={styles.modalOverlay} onClick={() => !ending && setIsEndModalOpen(false)}>
+          <div
+            className={styles.modalCard}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.modalEyebrow}>Confirm action</div>
+            <h3 className={styles.modalTitle}>End this auction now?</h3>
+            <p className={styles.modalText}>
+              This will close bidding immediately and lock in the current highest bid.
+            </p>
+            <div className={styles.modalActions}>
+              <button
+                className={styles.modalCancelBtn}
+                onClick={() => setIsEndModalOpen(false)}
+                disabled={ending}
+              >
+                Cancel
+              </button>
+              <button
+                className={styles.modalConfirmBtn}
+                onClick={handleEnd}
+                disabled={ending}
+              >
+                {ending ? "Ending..." : "End Auction"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

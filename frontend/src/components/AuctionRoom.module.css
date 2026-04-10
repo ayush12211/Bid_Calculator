@@ -59,6 +59,7 @@
 .bidBtn:disabled { background: #999; cursor: not-allowed; }
 .endBtn { width: 100%; padding: 9px; background: #fde8e8; color: #a83232; border: 1px solid #f5c0c0; border-radius: 8px; font-size: 13px; font-weight: 500; transition: background 0.15s; }
 .endBtn:hover { background: #fbd0d0; }
+.endBtn:disabled { opacity: 0.7; cursor: not-allowed; }
 
 @media (max-width: 640px) {
   .bidRow {
@@ -82,3 +83,86 @@
 .bidderName { font-size: 14px; color: #111; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .bidAmount { font-size: 14px; font-weight: 600; color: #22a55b; white-space: nowrap; }
 .bidTime { font-size: 12px; color: #aaa; white-space: nowrap; }
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 17, 17, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1000;
+}
+
+.modalCard {
+  width: min(100%, 420px);
+  background: #fff;
+  border: 1px solid #ece7de;
+  border-radius: 18px;
+  box-shadow: 0 18px 50px rgba(17, 17, 17, 0.16);
+  padding: 1.4rem;
+}
+
+.modalEyebrow {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #a83232;
+  margin-bottom: 0.6rem;
+}
+
+.modalTitle {
+  font-size: 22px;
+  line-height: 1.2;
+  color: #111;
+  margin-bottom: 0.6rem;
+}
+
+.modalText {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 1.25rem;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modalCancelBtn,
+.modalConfirmBtn {
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.modalCancelBtn {
+  background: #f7f4ed;
+  border-color: #e5dfd2;
+  color: #555;
+}
+
+.modalCancelBtn:hover {
+  background: #f0eadf;
+}
+
+.modalConfirmBtn {
+  background: #a83232;
+  color: #fff;
+}
+
+.modalConfirmBtn:hover {
+  background: #912c2c;
+}
+
+.modalCancelBtn:disabled,
+.modalConfirmBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
