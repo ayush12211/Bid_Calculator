@@ -64,6 +64,7 @@ export default function AuctionRoom({ auctionId, onReset }) {
     try {
       await placeBid(auctionId, { bidder: bidder.trim(), amount: Number(amount) });
       showToast(`Bid of ${formatINR(amount)} placed!`, "success");
+      setBidder("");
       setAmount("");
       await fetchAuction();
     } catch (err) {
