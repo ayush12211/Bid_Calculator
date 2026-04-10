@@ -185,8 +185,7 @@ export default function AuctionRoom({ auctionId, onReset }) {
             <div className={styles.amountWrap}>
               <span className={styles.rupee}>₹</span>
               <input
-                className={styles.input}
-                style={{ paddingLeft: "28px" }}
+                className={`${styles.input} ${styles.amountInput}`}
                 type="number"
                 placeholder="Amount"
                 min="1"

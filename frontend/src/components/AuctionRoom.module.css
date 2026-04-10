@@ -42,6 +42,17 @@
 .input:focus { border-color: #888; background: #fff; }
 .amountWrap { position: relative; flex: 1; }
 .rupee { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #888; font-size: 14px; pointer-events: none; }
+.amountInput {
+  padding-left: 30px;
+  color: #111;
+  caret-color: #111;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+.amountInput::-webkit-outer-spin-button,
+.amountInput::-webkit-inner-spin-button {
+  margin: 0;
+}
 .bidBtn { padding: 10px 20px; background: #111; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; white-space: nowrap; transition: background 0.15s; }
 .bidBtn:hover { background: #333; }
 .bidBtn:disabled { background: #999; cursor: not-allowed; }
