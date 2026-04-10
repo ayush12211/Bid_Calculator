@@ -37,10 +37,11 @@
 
 .bidCard { background: #fff; border: 1px solid #e8e8e0; border-radius: 14px; padding: 1.25rem; margin-bottom: 1rem; }
 .bidTitle { font-size: 15px; font-weight: 600; margin-bottom: 1rem; color: #111; }
-.bidRow { display: flex; gap: 8px; margin-bottom: 10px; }
+.bidRow { display: flex; gap: 8px; margin-bottom: 10px; align-items: stretch; }
 .input { padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; color: #111; background: #fafafa; outline: none; width: 100%; transition: border 0.15s; }
 .input:focus { border-color: #888; background: #fff; }
-.amountWrap { position: relative; flex: 1; }
+.bidderInput { flex: 1 1 0; min-width: 0; }
+.amountWrap { position: relative; flex: 0 0 140px; min-width: 140px; }
 .rupee { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #888; font-size: 14px; pointer-events: none; }
 .amountInput {
   padding-left: 30px;
@@ -58,6 +59,17 @@
 .bidBtn:disabled { background: #999; cursor: not-allowed; }
 .endBtn { width: 100%; padding: 9px; background: #fde8e8; color: #a83232; border: 1px solid #f5c0c0; border-radius: 8px; font-size: 13px; font-weight: 500; transition: background 0.15s; }
 .endBtn:hover { background: #fbd0d0; }
+
+@media (max-width: 640px) {
+  .bidRow {
+    flex-direction: column;
+  }
+
+  .amountWrap {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
 
 .historyCard { background: #fff; border: 1px solid #e8e8e0; border-radius: 14px; padding: 1.25rem; }
 .historyTitle { font-size: 15px; font-weight: 600; margin-bottom: 1rem; color: #111; }

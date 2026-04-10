@@ -177,7 +177,7 @@ export default function AuctionRoom({ auctionId, onReset }) {
           <h3 className={styles.bidTitle}>Place a bid</h3>
           <div className={styles.bidRow}>
             <input
-              className={styles.input}
+              className={`${styles.input} ${styles.bidderInput}`}
               placeholder="Your name"
               value={bidder}
               onChange={(e) => setBidder(e.target.value)}
